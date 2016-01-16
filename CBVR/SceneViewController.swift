@@ -1,5 +1,5 @@
 //
-//  GameViewController.swift
+//  SceneViewController
 //  CBVR
 //
 //  Created by Michael Kent on 1/15/16.
@@ -10,7 +10,13 @@ import UIKit
 import QuartzCore
 import SceneKit
 
-class GameViewController: UIViewController {
+class SceneViewController: UIViewController {
+    
+    @IBOutlet weak var leftScnView: SCNView!
+    @IBOutlet weak var rightScnView: SCNView!
+    
+    let eyeDistance = 2.0
+    let zeroParallaxDistance = 15.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,14 +24,56 @@ class GameViewController: UIViewController {
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         
-        // create and add a camera to the scene
+        let cameras = setupCamerasWithScene(scene)
+        setupLightingWithScene(scene)
+        
+        // retrieve the ship node
+        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
+        
+        // animate the 3d object
+        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+        
+        // set the scene to the view
+        leftScnView.scene = scene
+        rightScnView.scene = scene
+        
+        // configure the view
+        leftScnView.backgroundColor = UIColor.blackColor()
+        rightScnView.backgroundColor = UIColor.blackColor()
+        
+        // Setup cameras
+        leftScnView.pointOfView = cameras.left
+        rightScnView.pointOfView = cameras.right
+        
+        leftScnView.showsStatistics = true
+        
+        // add a tap gesture recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
+        leftScnView.addGestureRecognizer(tapGesture)
+    }
+    
+    func setupCamerasWithScene(scene: SCNScene) -> (left: SCNNode, right: SCNNode) {
         let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
         scene.rootNode.addChildNode(cameraNode)
         
-        // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        let angle = atan((eyeDistance / 2) / zeroParallaxDistance)
         
+        let cameraLeft = SCNNode()
+        cameraLeft.camera = SCNCamera()
+        cameraLeft.position = SCNVector3(-eyeDistance / 2, 0, zeroParallaxDistance)
+        cameraLeft.eulerAngles = SCNVector3(0, -angle, 0)
+        cameraNode.addChildNode(cameraLeft)
+        
+        let cameraRight = SCNNode()
+        cameraRight.camera = SCNCamera()
+        cameraRight.position = SCNVector3(eyeDistance / 2, 0, zeroParallaxDistance)
+        cameraRight.eulerAngles = SCNVector3(0, angle, 0)
+        cameraNode.addChildNode(cameraRight)
+        
+        return (cameraLeft, cameraRight)
+    }
+    
+    func setupLightingWithScene(scene: SCNScene) {
         // create and add a light to the scene
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
@@ -39,40 +87,12 @@ class GameViewController: UIViewController {
         ambientLightNode.light!.type = SCNLightTypeAmbient
         ambientLightNode.light!.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
-        
-        // retrieve the ship node
-        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
-        
-        // animate the 3d object
-        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
-        
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
-        // set the scene to the view
-        scnView.scene = scene
-        
-        // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
-        
-        // show statistics such as fps and timing information
-        scnView.showsStatistics = true
-        
-        // configure the view
-        scnView.backgroundColor = UIColor.blackColor()
-        
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
-        scnView.addGestureRecognizer(tapGesture)
     }
     
     func handleTap(gestureRecognize: UIGestureRecognizer) {
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
         // check what nodes are tapped
-        let p = gestureRecognize.locationInView(scnView)
-        let hitResults = scnView.hitTest(p, options: nil)
+        let p = gestureRecognize.locationInView(leftScnView)
+        let hitResults = leftScnView.hitTest(p, options: nil)
         // check that we clicked on at least one object
         if hitResults.count > 0 {
             // retrieved the first clicked object

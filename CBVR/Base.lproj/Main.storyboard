@@ -1,22 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D9c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Game View Controller-->
+        <!--Scene View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="SceneViewController" customModule="CBVR" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Cei-gA-s71"/>
-                        <viewControllerLayoutGuide type="bottom" id="O1X-57-Ctf"/>
+                        <viewControllerLayoutGuide type="top" id="ilb-zg-t8K"/>
+                        <viewControllerLayoutGuide type="bottom" id="9nq-20-Z5g"/>
                     </layoutGuides>
-                    <sceneKitView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx">
+                    <view key="view" contentMode="scaleToFill" id="EDk-Qt-Ip9">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </sceneKitView>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eKd-U4-ahH">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="600"/>
+                            </sceneKitView>
+                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fPB-Nj-dun">
+                                <rect key="frame" x="300" y="0.0" width="300" height="600"/>
+                            </sceneKitView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="eKd-U4-ahH" firstAttribute="width" secondItem="EDk-Qt-Ip9" secondAttribute="width" multiplier="1:2" id="EAX-st-6U7"/>
+                            <constraint firstItem="fPB-Nj-dun" firstAttribute="height" secondItem="EDk-Qt-Ip9" secondAttribute="height" id="MMt-6y-y0a"/>
+                            <constraint firstItem="eKd-U4-ahH" firstAttribute="centerY" secondItem="EDk-Qt-Ip9" secondAttribute="centerY" id="Mpy-jy-eaW"/>
+                            <constraint firstItem="eKd-U4-ahH" firstAttribute="leading" secondItem="EDk-Qt-Ip9" secondAttribute="leadingMargin" constant="-20" id="Vze-5U-q0R"/>
+                            <constraint firstItem="fPB-Nj-dun" firstAttribute="width" secondItem="EDk-Qt-Ip9" secondAttribute="width" multiplier="1:2" id="iEp-lr-7HX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="fPB-Nj-dun" secondAttribute="trailing" constant="-20" id="pqP-db-bMs"/>
+                            <constraint firstItem="fPB-Nj-dun" firstAttribute="centerY" secondItem="EDk-Qt-Ip9" secondAttribute="centerY" id="rPu-EI-QEN"/>
+                            <constraint firstItem="eKd-U4-ahH" firstAttribute="height" secondItem="EDk-Qt-Ip9" secondAttribute="height" id="vgb-MG-RkB"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="leftScnView" destination="eKd-U4-ahH" id="Ptw-rI-lHc"/>
+                        <outlet property="rightScnView" destination="fPB-Nj-dun" id="aQk-aU-jC7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
