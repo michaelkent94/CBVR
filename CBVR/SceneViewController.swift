@@ -15,8 +15,11 @@ class SceneViewController: UIViewController {
     @IBOutlet weak var leftScnView: SCNView!
     @IBOutlet weak var rightScnView: SCNView!
     
-    let eyeDistance = 2.0
-    let zeroParallaxDistance = 15.0
+    let eyeDistance = 2.0 as Float
+    let zeroParallaxDistance = 15.0 as Float
+    let cameraOrigin = SCNVector3(-2, 0, 15)
+    
+    var cameraNode: SCNNode!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +35,9 @@ class SceneViewController: UIViewController {
         
         // animate the 3d object
         ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+        let moveBy = SCNAction.moveBy(SCNVector3(4, 0, 0), duration: 1)
+        moveBy.timingMode = .EaseInEaseOut
+        cameraNode.runAction(SCNAction.repeatActionForever(SCNAction.sequence([moveBy, moveBy.reversedAction()])))
         
         // set the scene to the view
         leftScnView.scene = scene
@@ -53,20 +59,20 @@ class SceneViewController: UIViewController {
     }
     
     func setupCamerasWithScene(scene: SCNScene) -> (left: SCNNode, right: SCNNode) {
-        let cameraNode = SCNNode()
+        cameraNode = SCNNode()
         scene.rootNode.addChildNode(cameraNode)
         
         let angle = atan((eyeDistance / 2) / zeroParallaxDistance)
         
         let cameraLeft = SCNNode()
         cameraLeft.camera = SCNCamera()
-        cameraLeft.position = SCNVector3(-eyeDistance / 2, 0, zeroParallaxDistance)
+        cameraLeft.position = SCNVector3(cameraOrigin.x - eyeDistance / 2, cameraOrigin.y, cameraOrigin.z)
         cameraLeft.eulerAngles = SCNVector3(0, -angle, 0)
         cameraNode.addChildNode(cameraLeft)
         
         let cameraRight = SCNNode()
         cameraRight.camera = SCNCamera()
-        cameraRight.position = SCNVector3(eyeDistance / 2, 0, zeroParallaxDistance)
+        cameraRight.position = SCNVector3(cameraOrigin.x + eyeDistance / 2, cameraOrigin.y, cameraOrigin.z)
         cameraRight.eulerAngles = SCNVector3(0, angle, 0)
         cameraNode.addChildNode(cameraRight)
         
@@ -78,7 +84,7 @@ class SceneViewController: UIViewController {
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+        lightNode.position = SCNVector3(0, 10, 10)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
