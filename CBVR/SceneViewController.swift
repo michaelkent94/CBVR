@@ -35,6 +35,8 @@ class SceneViewController: UIViewController {
         
         // animate the 3d object
         ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+        
+        // test camera movement
         let moveBy = SCNAction.moveBy(SCNVector3(4, 0, 0), duration: 1)
         moveBy.timingMode = .EaseInEaseOut
         cameraNode.runAction(SCNAction.repeatActionForever(SCNAction.sequence([moveBy, moveBy.reversedAction()])))
