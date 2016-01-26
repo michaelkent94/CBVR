@@ -15,6 +15,9 @@
 		4C208CAC1C49D7F100AB7FB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C208CAA1C49D7F100AB7FB7 /* LaunchScreen.storyboard */; };
 		4C208CB71C49D7F100AB7FB7 /* CBVRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C208CB61C49D7F100AB7FB7 /* CBVRTests.swift */; };
 		4C208CC21C49D7F100AB7FB7 /* CBVRUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C208CC11C49D7F100AB7FB7 /* CBVRUITests.swift */; };
+		4C530F7F1C532DF6008740E6 /* StereoCameraNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C530F7E1C532DF6008740E6 /* StereoCameraNode.swift */; };
+		4C530F821C559E5B008740E6 /* OrientationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C530F811C559E5B008740E6 /* OrientationManager.swift */; };
+		4C530F841C55DD08008740E6 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C530F831C55DD08008740E6 /* VideoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		4C208CBD1C49D7F100AB7FB7 /* CBVRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CBVRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C208CC11C49D7F100AB7FB7 /* CBVRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBVRUITests.swift; sourceTree = "<group>"; };
 		4C208CC31C49D7F100AB7FB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C530F7E1C532DF6008740E6 /* StereoCameraNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StereoCameraNode.swift; sourceTree = "<group>"; };
+		4C530F811C559E5B008740E6 /* OrientationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationManager.swift; sourceTree = "<group>"; };
+		4C530F831C55DD08008740E6 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +105,15 @@
 		4C208C9E1C49D7F100AB7FB7 /* CBVR */ = {
 			isa = PBXGroup;
 			children = (
-				4C208C9F1C49D7F100AB7FB7 /* AppDelegate.swift */,
-				4C208CA11C49D7F100AB7FB7 /* art.scnassets */,
-				4C208CA31C49D7F100AB7FB7 /* SceneViewController.swift */,
-				4C208CA51C49D7F100AB7FB7 /* Main.storyboard */,
 				4C208CA81C49D7F100AB7FB7 /* Assets.xcassets */,
-				4C208CAA1C49D7F100AB7FB7 /* LaunchScreen.storyboard */,
-				4C208CAD1C49D7F100AB7FB7 /* Info.plist */,
+				4C208CA11C49D7F100AB7FB7 /* art.scnassets */,
+				4C208C9F1C49D7F100AB7FB7 /* AppDelegate.swift */,
+				4C530F811C559E5B008740E6 /* OrientationManager.swift */,
+				4C208CA31C49D7F100AB7FB7 /* SceneViewController.swift */,
+				4C530F7E1C532DF6008740E6 /* StereoCameraNode.swift */,
+				4C530F831C55DD08008740E6 /* VideoView.swift */,
+				4C208CA51C49D7F100AB7FB7 /* Main.storyboard */,
+				4C530F801C559E3C008740E6 /* Supporting Files */,
 			);
 			path = CBVR;
 			sourceTree = "<group>";
@@ -126,6 +134,15 @@
 				4C208CC31C49D7F100AB7FB7 /* Info.plist */,
 			);
 			path = CBVRUITests;
+			sourceTree = "<group>";
+		};
+		4C530F801C559E3C008740E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C208CAA1C49D7F100AB7FB7 /* LaunchScreen.storyboard */,
+				4C208CAD1C49D7F100AB7FB7 /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,6 +213,7 @@
 				TargetAttributes = {
 					4C208C9B1C49D7F100AB7FB7 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 7HNW9N9XV2;
 					};
 					4C208CB11C49D7F100AB7FB7 = {
 						CreatedOnToolsVersion = 7.2;
@@ -260,7 +278,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C530F7F1C532DF6008740E6 /* StereoCameraNode.swift in Sources */,
+				4C530F841C55DD08008740E6 /* VideoView.swift in Sources */,
 				4C208CA41C49D7F100AB7FB7 /* SceneViewController.swift in Sources */,
+				4C530F821C559E5B008740E6 /* OrientationManager.swift in Sources */,
 				4C208CA01C49D7F100AB7FB7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -401,10 +422,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CBVR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.michaelkent.CBVR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -412,10 +436,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CBVR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.michaelkent.CBVR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -488,6 +515,7 @@
 				4C208CC81C49D7F100AB7FB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C208CC91C49D7F100AB7FB7 /* Build configuration list for PBXNativeTarget "CBVRTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +524,7 @@
 				4C208CCB1C49D7F100AB7FB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C208CCC1C49D7F100AB7FB7 /* Build configuration list for PBXNativeTarget "CBVRUITests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +533,7 @@
 				4C208CCE1C49D7F100AB7FB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

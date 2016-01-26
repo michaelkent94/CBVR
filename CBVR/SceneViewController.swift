@@ -16,10 +16,11 @@ class SceneViewController: UIViewController {
     @IBOutlet weak var rightScnView: SCNView!
     
     let eyeDistance = 2.0 as Float
-    let zeroParallaxDistance = 15.0 as Float
-    let cameraOrigin = SCNVector3(-2, 0, 15)
+    let cameraOrigin = SCNVector3(0, 0, 20)
     
-    var cameraNode: SCNNode!
+    var orientationManager: OrientationManager!
+    
+    var cameraNode = StereoCameraNode()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,58 +28,31 @@ class SceneViewController: UIViewController {
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         
-        let cameras = setupCamerasWithScene(scene)
         setupLightingWithScene(scene)
         
-        // retrieve the ship node
-        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
-        
-        // animate the 3d object
-        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
-        
-        // test camera movement
-        let moveBy = SCNAction.moveBy(SCNVector3(4, 0, 0), duration: 1)
-        moveBy.timingMode = .EaseInEaseOut
-        cameraNode.runAction(SCNAction.repeatActionForever(SCNAction.sequence([moveBy, moveBy.reversedAction()])))
-        
-        // set the scene to the view
-        leftScnView.scene = scene
-        rightScnView.scene = scene
-        
-        // configure the view
-        leftScnView.backgroundColor = UIColor.blackColor()
-        rightScnView.backgroundColor = UIColor.blackColor()
-        
-        // Setup cameras
-        leftScnView.pointOfView = cameras.left
-        rightScnView.pointOfView = cameras.right
-        
-        leftScnView.showsStatistics = true
-        
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
-        leftScnView.addGestureRecognizer(tapGesture)
-    }
-    
-    func setupCamerasWithScene(scene: SCNScene) -> (left: SCNNode, right: SCNNode) {
-        cameraNode = SCNNode()
+        // Setup and add the camera
+        cameraNode.position = cameraOrigin
         scene.rootNode.addChildNode(cameraNode)
         
-        let angle = atan((eyeDistance / 2) / zeroParallaxDistance)
+        // Set the camera to rotate with the device
+        orientationManager = OrientationManager {
+            (roll, pitch, yaw) -> Void in
+            self.cameraNode.eulerAngles = SCNVector3(pitch, yaw, roll)
+        }
         
-        let cameraLeft = SCNNode()
-        cameraLeft.camera = SCNCamera()
-        cameraLeft.position = SCNVector3(cameraOrigin.x - eyeDistance / 2, cameraOrigin.y, cameraOrigin.z)
-        cameraLeft.eulerAngles = SCNVector3(0, -angle, 0)
-        cameraNode.addChildNode(cameraLeft)
+        // grab the ship and rotate it
+        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
+        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
         
-        let cameraRight = SCNNode()
-        cameraRight.camera = SCNCamera()
-        cameraRight.position = SCNVector3(cameraOrigin.x + eyeDistance / 2, cameraOrigin.y, cameraOrigin.z)
-        cameraRight.eulerAngles = SCNVector3(0, angle, 0)
-        cameraNode.addChildNode(cameraRight)
+        // Set up the SCNViews
+        leftScnView.scene = scene
+        leftScnView.backgroundColor = UIColor.clearColor()
+        leftScnView.pointOfView = cameraNode.cameraLeft
+        leftScnView.showsStatistics = true
         
-        return (cameraLeft, cameraRight)
+        rightScnView.scene = scene
+        rightScnView.backgroundColor = UIColor.clearColor()
+        rightScnView.pointOfView = cameraNode.cameraRight
     }
     
     func setupLightingWithScene(scene: SCNScene) {
@@ -104,10 +78,11 @@ class SceneViewController: UIViewController {
         // check that we clicked on at least one object
         if hitResults.count > 0 {
             // retrieved the first clicked object
-            let result: AnyObject! = hitResults[0]
+            let result: SCNHitTestResult = hitResults[0]
             
             // get its material
-            let material = result.node!.geometry!.firstMaterial!
+            guard let material = result.node.geometry?.firstMaterial
+                  else { return }
             
             // highlight it
             SCNTransaction.begin()
@@ -130,7 +105,7 @@ class SceneViewController: UIViewController {
     }
     
     override func shouldAutorotate() -> Bool {
-        return true
+        return false
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -138,11 +113,7 @@ class SceneViewController: UIViewController {
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return .AllButUpsideDown
-        } else {
-            return .All
-        }
+        return .LandscapeRight
     }
     
     override func didReceiveMemoryWarning() {
