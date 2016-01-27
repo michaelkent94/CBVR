@@ -14,7 +14,7 @@ class StereoCameraNode: SCNNode {
     var cameraRight = SCNNode()
     let eyeDistance: CGFloat
     
-    init(eyeDistance: CGFloat = 6.5) {
+    init(eyeDistance: CGFloat = 0.065) {
         self.eyeDistance = eyeDistance
         super.init()
         
