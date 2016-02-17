@@ -15,8 +15,7 @@ class SceneViewController: UIViewController {
     @IBOutlet weak var leftScnView: SCNView!
     @IBOutlet weak var rightScnView: SCNView!
     
-    let eyeDistance = 2.0 as Float
-    let cameraOrigin = SCNVector3(0, 0, 20)
+    let cameraOrigin = SCNVector3(0, 0, 0)
     
     var orientationManager: OrientationManager!
     
@@ -42,7 +41,21 @@ class SceneViewController: UIViewController {
         
         // grab the ship and rotate it
         let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
-        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+        ship.removeFromParentNode()
+        
+        // Create a bunch of ships
+        for _ in 0..<10 {
+            let shipCopy = ship.clone()
+            let x = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.125 + 0.125
+            let y = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.125 + 0.125
+            let z = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.125 + 0.125
+            shipCopy.position = SCNVector3(x, y, z)
+            let size = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.0125 + 0.00675
+            shipCopy.scale = SCNVector3(size, size, size)
+            shipCopy.pivot = SCNMatrix4MakeTranslation(Float(x), 0, Float(z))
+            shipCopy.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+            scene.rootNode.addChildNode(shipCopy)
+        }
         
         // Set up the SCNViews
         leftScnView.scene = scene

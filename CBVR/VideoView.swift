@@ -37,6 +37,9 @@ class VideoView: UIView {
         if let captureDevice = captureDevice {
             do {
                 try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
+                try captureDevice.lockForConfiguration()
+                captureDevice.videoZoomFactor = 1
+                captureDevice.unlockForConfiguration()
             } catch { return }
             
             let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)

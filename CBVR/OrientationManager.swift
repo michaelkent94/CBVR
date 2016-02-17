@@ -23,8 +23,8 @@ class OrientationManager: NSObject {
             (deviceMotion, error) -> Void in
             if let attitude = deviceMotion?.attitude {
                 self.callback(roll: CGFloat(-attitude.pitch),
-                              pitch: CGFloat(-attitude.roll - M_PI_2) * 2,
-                              yaw: CGFloat(attitude.yaw) * 2)
+                              pitch: CGFloat(-attitude.roll - M_PI_2),
+                              yaw: CGFloat(attitude.yaw))
             }
         }
     }
