@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15E33e" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15E39c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -20,13 +21,19 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eKd-U4-ahH">
-                                <rect key="frame" x="0.0" y="0.0" width="300" height="600"/>
+                                <rect key="frame" x="0.0" y="187.5" width="300" height="225"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="eKd-U4-ahH" secondAttribute="height" multiplier="4:3" id="UVH-va-f4j"/>
+                                </constraints>
                             </sceneKitView>
                             <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fPB-Nj-dun">
-                                <rect key="frame" x="300" y="0.0" width="300" height="600"/>
+                                <rect key="frame" x="300" y="187.5" width="300" height="225"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="fPB-Nj-dun" secondAttribute="height" multiplier="4:3" id="2wr-YC-C6l"/>
+                                </constraints>
                             </sceneKitView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="eKd-U4-ahH" firstAttribute="width" secondItem="EDk-Qt-Ip9" secondAttribute="width" multiplier="1:2" id="EAX-st-6U7"/>
                             <constraint firstItem="fPB-Nj-dun" firstAttribute="height" secondItem="EDk-Qt-Ip9" secondAttribute="height" id="MMt-6y-y0a"/>
@@ -37,6 +44,12 @@
                             <constraint firstItem="fPB-Nj-dun" firstAttribute="centerY" secondItem="EDk-Qt-Ip9" secondAttribute="centerY" id="rPu-EI-QEN"/>
                             <constraint firstItem="eKd-U4-ahH" firstAttribute="height" secondItem="EDk-Qt-Ip9" secondAttribute="height" id="vgb-MG-RkB"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="vgb-MG-RkB"/>
+                                <exclude reference="MMt-6y-y0a"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="leftScnView" destination="eKd-U4-ahH" id="Ptw-rI-lHc"/>

@@ -43,6 +43,8 @@ class SceneViewController: UIViewController {
         let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
         ship.removeFromParentNode()
         
+        srand(UInt32(NSDate().timeIntervalSince1970))
+        
         // Create a bunch of ships
         for _ in 0..<10 {
             let shipCopy = ship.clone()

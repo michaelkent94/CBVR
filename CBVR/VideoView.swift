@@ -25,7 +25,7 @@ class VideoView: UIView {
     }
     
     private func commonInit() {
-        captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        captureSession.sessionPreset = AVCaptureSessionPresetPhoto
         for device in AVCaptureDevice.devices() {
             if device.hasMediaType(AVMediaTypeVideo) && device.position == .Back {
                 captureDevice = device as? AVCaptureDevice
@@ -44,7 +44,7 @@ class VideoView: UIView {
             
             let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             previewLayer.connection.videoOrientation = .LandscapeRight
-            previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+            previewLayer.videoGravity = AVLayerVideoGravityResizeAspect
             previewLayer.frame = CGRect(x: 0, y: 0, width: self.frame.size.width / 2, height: self.frame.size.height)
             
             let replicatorLayer = CAReplicatorLayer()
