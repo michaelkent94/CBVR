@@ -33,4 +33,49 @@ class CBVRTests: XCTestCase {
         }
     }
     
+    func testTrackerProcessSingle() {
+        let width = 100 as Int
+        let height = 100 as Int
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpace, CGImageAlphaInfo.PremultipliedLast.rawValue)
+        
+        CGContextSetRGBFillColor(context, 255, 0, 0, 255)
+        CGContextFillRect(context, CGRect(x: 0, y: 0, width: width, height: height))
+        
+        let image = CGBitmapContextCreateImage(context)!
+        
+        let tracker = Tracker()
+        let color = Color(r: 255, g: 0, b: 0)
+        tracker.colors.append(color)
+        tracker.process(image: image)
+        let x = tracker.centersByColor[color]!.x
+        let y = tracker.centersByColor[color]!.y
+        XCTAssert(x >= 49.5 && x <= 50.5 && y >= 49.5 && y <= 50.5, "Center not in correct location")
+    }
+    
+    func testTrackerProcessMultiple() {
+        let width = 100 as Int
+        let height = 100 as Int
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpace, CGImageAlphaInfo.PremultipliedLast.rawValue)
+        
+        CGContextSetRGBFillColor(context, 255, 0, 0, 255)
+        CGContextFillRect(context, CGRect(x: 0, y: 0, width: width / 2, height: height / 2))
+        
+        CGContextSetRGBFillColor(context, 0, 255, 0, 255)
+        CGContextFillRect(context, CGRect(x: width / 2, y: height / 2, width: width / 2, height: height / 2))
+        
+        let image = CGBitmapContextCreateImage(context)!
+        
+        let tracker = Tracker()
+        let red = Color(r: 255, g: 0, b: 0)
+        let green = Color(r: 0, g: 255, b: 0)
+        tracker.colors += [red, green]
+        tracker.process(image: image)
+        
+        XCTAssertTrue(true)
+    }
+    
 }

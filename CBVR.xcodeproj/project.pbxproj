@@ -18,6 +18,7 @@
 		4C530F7F1C532DF6008740E6 /* StereoCameraNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C530F7E1C532DF6008740E6 /* StereoCameraNode.swift */; };
 		4C530F821C559E5B008740E6 /* OrientationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C530F811C559E5B008740E6 /* OrientationManager.swift */; };
 		4C530F841C55DD08008740E6 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C530F831C55DD08008740E6 /* VideoView.swift */; };
+		4C75F9CD1C7503970020A9EB /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C75F9CC1C7503970020A9EB /* Tracker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		4C530F7E1C532DF6008740E6 /* StereoCameraNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StereoCameraNode.swift; sourceTree = "<group>"; };
 		4C530F811C559E5B008740E6 /* OrientationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationManager.swift; sourceTree = "<group>"; };
 		4C530F831C55DD08008740E6 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		4C75F9CC1C7503970020A9EB /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				4C208CA31C49D7F100AB7FB7 /* SceneViewController.swift */,
 				4C530F7E1C532DF6008740E6 /* StereoCameraNode.swift */,
 				4C530F831C55DD08008740E6 /* VideoView.swift */,
+				4C75F9CC1C7503970020A9EB /* Tracker.swift */,
 				4C208CA51C49D7F100AB7FB7 /* Main.storyboard */,
 				4C530F801C559E3C008740E6 /* Supporting Files */,
 			);
@@ -278,6 +281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C75F9CD1C7503970020A9EB /* Tracker.swift in Sources */,
 				4C530F7F1C532DF6008740E6 /* StereoCameraNode.swift in Sources */,
 				4C530F841C55DD08008740E6 /* VideoView.swift in Sources */,
 				4C208CA41C49D7F100AB7FB7 /* SceneViewController.swift in Sources */,
