@@ -89,7 +89,7 @@ class SceneViewController: UIViewController {
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
-        lightNode.position = SCNVector3(0, 10, 10)
+        lightNode.position = SCNVector3(0, 10, 0)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
