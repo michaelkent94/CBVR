@@ -70,7 +70,7 @@ public class Tracker {
                     if distance2 <= threshold2 {
                         if let sum = sumsByColor[color] {
                             sumsByColor[color] = (sum.x + Float(x), sum.y + Float(y))
-                            countsByColor[color]!++
+                            countsByColor[color]! += 1
                         } else {
                             sumsByColor[color] = (Float(x), Float(y))
                             countsByColor[color] = 1
@@ -79,7 +79,7 @@ public class Tracker {
                     }
                 }
                 
-                currentPixel++
+                currentPixel = currentPixel.successor()
             }
         }
         

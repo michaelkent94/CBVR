@@ -48,14 +48,23 @@ class SceneViewController: UIViewController {
         // Create a bunch of ships
         for _ in 0..<10 {
             let shipCopy = ship.clone()
-            let x = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.125 + 0.125
-            let y = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.125 + 0.125
-            let z = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.125 + 0.125
+            
+            let u = CGFloat(rand()) / CGFloat(RAND_MAX)
+            let v = CGFloat(rand()) / CGFloat(RAND_MAX)
+            
+            let theta = 2 * CGFloat(M_PI) * u
+            let phi = acos(2 * v - 1)
+            let r = 4 as CGFloat
+            
+            let x = r * sin(phi) * cos(theta)
+            let y = r * sin(phi) * sin(theta)
+            let z = r * cos(phi)
+            
             shipCopy.position = SCNVector3(x, y, z)
-            let size = CGFloat(rand()) / CGFloat(RAND_MAX) * 0.0125 + 0.00675
+            let size = 0.15
             shipCopy.scale = SCNVector3(size, size, size)
             shipCopy.pivot = SCNMatrix4MakeTranslation(Float(x), 0, Float(z))
-            shipCopy.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+//            shipCopy.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
             scene.rootNode.addChildNode(shipCopy)
         }
         

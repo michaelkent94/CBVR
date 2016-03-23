@@ -19,7 +19,7 @@ class OrientationManager: NSObject {
     init(withCallback callback: OrientationManagerUpdateCallback) {
         self.callback = callback
         super.init()
-        motionManager.startDeviceMotionUpdatesUsingReferenceFrame(.XArbitraryCorrectedZVertical, toQueue: NSOperationQueue.mainQueue()) {
+        motionManager.startDeviceMotionUpdatesUsingReferenceFrame(.XArbitraryZVertical, toQueue: NSOperationQueue.mainQueue()) {
             (deviceMotion, error) -> Void in
             if let attitude = deviceMotion?.attitude {
                 self.callback(roll: CGFloat(-attitude.pitch),

@@ -60,8 +60,7 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
             output = AVCaptureVideoDataOutput()
             output.videoSettings = [kCVPixelBufferPixelFormatTypeKey: NSNumber(int: Int32(kCVPixelFormatType_32BGRA))]
             output.alwaysDiscardsLateVideoFrames = true
-            var outputQueue : dispatch_queue_t?
-            outputQueue = dispatch_queue_create("outputQueue", DISPATCH_QUEUE_SERIAL);
+            let outputQueue = dispatch_queue_create("outputQueue", DISPATCH_QUEUE_SERIAL)
             output.setSampleBufferDelegate(self, queue: outputQueue)
             if captureSession.canAddOutput(output) {
                 captureSession.addOutput(output)
