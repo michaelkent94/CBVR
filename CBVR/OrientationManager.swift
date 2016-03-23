@@ -19,6 +19,8 @@ class OrientationManager: NSObject {
     init(withCallback callback: OrientationManagerUpdateCallback) {
         self.callback = callback
         super.init()
+        motionManager.showsDeviceMovementDisplay = true
+        motionManager.deviceMotionUpdateInterval = 1.0 / 60.0
         motionManager.startDeviceMotionUpdatesUsingReferenceFrame(.XArbitraryZVertical, toQueue: NSOperationQueue.mainQueue()) {
             (deviceMotion, error) -> Void in
             if let attitude = deviceMotion?.attitude {

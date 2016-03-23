@@ -36,7 +36,12 @@ class SceneViewController: UIViewController {
         // Set the camera to rotate with the device
         orientationManager = OrientationManager {
             (roll, pitch, yaw) -> Void in
-            self.cameraNode.eulerAngles = SCNVector3(pitch, yaw, roll)
+            // We want to apply yaw, pitch, then roll
+            var transform = SCNMatrix4Identity
+            transform = SCNMatrix4Rotate(transform, Float(pitch), 1, 0, 0)
+            transform = SCNMatrix4Rotate(transform, Float(roll), 0, 0, 1)
+            transform = SCNMatrix4Rotate(transform, Float(yaw), 0, 1, 0)
+            self.cameraNode.transform = transform
         }
         
         // grab the ship and rotate it
