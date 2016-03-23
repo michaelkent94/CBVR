@@ -58,7 +58,7 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
             
             // create an output and attach to the capture session
             output = AVCaptureVideoDataOutput()
-            output.videoSettings = NSDictionary(object: Int(kCVPixelFormatType_32RGBA), forKey: kCVPixelBufferPixelFormatTypeKey as String) as [NSObject : AnyObject] // This line is giving me trouble. I've tried several different things but none of them have worked
+            output.videoSettings = [kCVPixelBufferPixelFormatTypeKey: NSNumber(int: Int32(kCVPixelFormatType_32BGRA))]
             output.alwaysDiscardsLateVideoFrames = true
             var outputQueue : dispatch_queue_t?
             outputQueue = dispatch_queue_create("outputQueue", DISPATCH_QUEUE_SERIAL);
@@ -90,13 +90,14 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         let height = CVPixelBufferGetHeight(buffer)
         
         // create a bitmap graphics context with the buffer data
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.First.rawValue)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue).union(.ByteOrder32Little)
         let colorSpace = CGColorSpaceCreateDeviceRGB() // create a device-dependent RGB color space
         let context = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, bitmapInfo.rawValue)
-        CVPixelBufferUnlockBaseAddress(buffer, 0) // unlock the buffer
         
         // create a CGImage from the data in the bitmap graphics context
         let image = CGBitmapContextCreateImage(context)!
+        
+        CVPixelBufferUnlockBaseAddress(buffer, 0) // unlock the buffer
         return image
     }
 
