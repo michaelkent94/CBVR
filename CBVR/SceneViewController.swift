@@ -36,7 +36,7 @@ class SceneViewController: UIViewController {
         // Set the camera to rotate with the device
         orientationManager = OrientationManager {
             (roll, pitch, yaw) -> Void in
-            // We want to apply yaw, pitch, then roll
+            // We want to apply yaw, roll, then pitch
             var transform = SCNMatrix4Identity
             transform = SCNMatrix4Rotate(transform, Float(pitch), 1, 0, 0)
             transform = SCNMatrix4Rotate(transform, Float(roll), 0, 0, 1)
