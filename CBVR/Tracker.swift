@@ -34,6 +34,10 @@ public class Tracker {
     public var centersByColor = [Color: CGPoint]()
     public var threshold = 10 as Int
     
+    public init(colors: [Color]) {
+        self.colors = colors
+    }
+    
     public func process(image image: CGImage) {
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let width = CGImageGetWidth(image)

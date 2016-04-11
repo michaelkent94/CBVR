@@ -44,6 +44,13 @@ class SceneViewController: UIViewController {
             self.cameraNode.transform = transform
         }
         
+        // Add the sphere finger node
+        let sphere = SCNSphere(radius: 0.25)
+        sphere.firstMaterial?.diffuse.contents = UIColor.redColor()
+        let sphereNode = SCNNode(geometry: sphere)
+        sphereNode.position = SCNVector3(x: 0, y: 0, z: 5)
+        scene.rootNode.addChildNode(sphereNode)
+        
         // grab the ship and rotate it
         let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
         ship.removeFromParentNode()

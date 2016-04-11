@@ -14,6 +14,7 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
     var output: AVCaptureVideoDataOutput!
+    var tracker: Tracker = Tracker(colors: [Color(r: 255, g: 0, b: 0)])
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,7 +74,8 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
         let image:CGImage = imageFromSampleBuffer(sampleBuffer)
-        // Process image here
+        tracker.process(image: image)
+        print("", tracker.centersByColor)
     }
     
     
