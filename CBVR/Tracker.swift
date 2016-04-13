@@ -34,8 +34,9 @@ public class Tracker {
     public var centersByColor = [Color: CGPoint]()
     public var threshold = 10 as Int
     
-    public init(colors: [Color]) {
+    public init(colors: [Color], threshold: Int) {
         self.colors = colors
+        self.threshold = threshold
     }
     
     public func process(image image: CGImage) {
@@ -92,6 +93,7 @@ public class Tracker {
             // Looks like height is swapped somehow, so put it back
             let average = CGPoint(x: CGFloat(sum.x) / count, y: CGFloat(height) - CGFloat(sum.y) / count)
             centersByColor[color] = average
+            print("hit - center = ", average)
         }
     }
 }
