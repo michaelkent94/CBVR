@@ -30,12 +30,13 @@ public func ==(lhs: Color, rhs: Color) -> Bool {
 
 public class Tracker {
     
-    public var colors = [Color]()
+    public var colors: [Color]
     public var centersByColor = [Color: CGPoint]()
-    public var threshold = 10 as Int
+    public var threshold: Int
     
-    public init(colors: [Color]) {
+    public init(colors: [Color], threshold: Int = 10) {
         self.colors = colors
+        self.threshold = threshold
     }
     
     public func process(image image: CGImage) {
@@ -66,6 +67,8 @@ public class Tracker {
                 let g = green(currentColorValue)
                 let b = blue(currentColorValue)
                 
+//                print(String(format:"%x", currentColorValue) + ": (\(r), \(g), \(b))")
+                
                 for color in colors {
                     let diffR = Int(r) - Int(color.r)
                     let diffG = Int(g) - Int(color.g)
@@ -86,6 +89,8 @@ public class Tracker {
                 currentPixel = currentPixel.successor()
             }
         }
+        
+        centersByColor.removeAll()
         
         for (color, sum) in sumsByColor {
             let count = CGFloat(countsByColor[color]!)

@@ -14,7 +14,9 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
     var output: AVCaptureVideoDataOutput!
-    var tracker: Tracker = Tracker(colors: [Color(r: 255, g: 0, b: 0)])
+    var tracker: Tracker = Tracker(colors: [Color(r: 100, g: 0, b: 0)], threshold: 50)
+    
+    var overlay: OverlayLayer!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +38,7 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     override func didMoveToSuperview() {
+        var previewLayer: AVCaptureVideoPreviewLayer!
         if let captureDevice = captureDevice {
             do {
                 try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
@@ -44,7 +47,7 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                 captureDevice.unlockForConfiguration()
             } catch { return }
             
-            let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             previewLayer.connection.videoOrientation = .LandscapeRight
             previewLayer.videoGravity = AVLayerVideoGravityResizeAspect
             previewLayer.frame = CGRect(x: 0, y: 0, width: self.frame.size.width / 2, height: self.frame.size.height)
@@ -69,13 +72,35 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
             
             captureSession.startRunning()
         }
+        
+        if previewLayer != nil {
+            overlay = OverlayLayer()
+            overlay.frame = previewLayer.bounds
+            overlay.bounds = previewLayer.bounds
+            previewLayer.addSublayer(overlay)
+            overlay.setNeedsDisplay()
+        }
     }
     
     
     func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
-        let image:CGImage = imageFromSampleBuffer(sampleBuffer)
+        let image = imageFromSampleBuffer(sampleBuffer)
         tracker.process(image: image)
-        print("", tracker.centersByColor)
+        
+        var center = tracker.centersByColor.values.first
+        if center != nil {
+            let scale = self.layer.bounds.size.width / CGFloat(CGImageGetWidth(image))
+            center!.x *= scale
+            center!.y *= scale
+        }
+        
+//        print("<\(bounds.size)>: \(center)")
+        
+        overlay.center = center
+        dispatch_async(dispatch_get_main_queue()) {
+            self.overlay.contents = nil
+            self.overlay.setNeedsDisplay()
+        }
     }
     
     
@@ -102,12 +127,21 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         return image
     }
 
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
-    }
-    */
+//    // Only override drawRect: if you perform custom drawing.
+//    // An empty implementation adversely affects performance during animation.
+//    override func drawRect(rect: CGRect) {
+//        
+//    }
+}
 
+class OverlayLayer: CALayer {
+    var center: CGPoint?
+    
+    override func drawInContext(ctx: CGContext) {
+        guard let center = center else { return }
+        
+        CGContextSetStrokeColorWithColor(ctx, UIColor.whiteColor().CGColor)
+        CGContextSetLineWidth(ctx, 5)
+        CGContextStrokeEllipseInRect(ctx, CGRect(x: center.x - 20, y: center.y - 20, width: 40, height: 40))
+    }
 }
