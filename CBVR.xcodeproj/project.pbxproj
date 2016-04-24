@@ -216,7 +216,7 @@
 				TargetAttributes = {
 					4C208C9B1C49D7F100AB7FB7 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 7HNW9N9XV2;
+						DevelopmentTeam = G4G5LB7KXA;
 					};
 					4C208CB11C49D7F100AB7FB7 = {
 						CreatedOnToolsVersion = 7.2;
@@ -430,7 +430,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CBVR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.michaelkent.CBVR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelkent.CBVR1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -444,7 +444,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CBVR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.michaelkent.CBVR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelkent.CBVR1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

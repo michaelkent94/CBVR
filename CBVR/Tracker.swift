@@ -97,6 +97,7 @@ public class Tracker {
             // Looks like height is swapped somehow, so put it back
             let average = CGPoint(x: CGFloat(sum.x) / count, y: CGFloat(height) - CGFloat(sum.y) / count)
             centersByColor[color] = average
+            print("hit - center = ", average)
         }
     }
 }
