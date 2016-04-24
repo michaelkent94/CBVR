@@ -32,6 +32,7 @@ public class Tracker {
     
     public var colors: [Color]
     public var centersByColor = [Color: CGPoint]()
+    public var depthsByColor = [Color: CGFloat]()
     public var threshold: Int
     
     public init(colors: [Color], threshold: Int = 10) {
@@ -67,8 +68,6 @@ public class Tracker {
                 let g = green(currentColorValue)
                 let b = blue(currentColorValue)
                 
-//                print(String(format:"%x", currentColorValue) + ": (\(r), \(g), \(b))")
-                
                 for color in colors {
                     let diffR = Int(r) - Int(color.r)
                     let diffG = Int(g) - Int(color.g)
@@ -91,13 +90,16 @@ public class Tracker {
         }
         
         centersByColor.removeAll()
+        depthsByColor.removeAll()
         
         for (color, sum) in sumsByColor {
             let count = CGFloat(countsByColor[color]!)
             // Looks like height is swapped somehow, so put it back
             let average = CGPoint(x: CGFloat(sum.x) / count, y: CGFloat(height) - CGFloat(sum.y) / count)
             centersByColor[color] = average
-            print("hit - center = ", average)
+            
+            let radius = sqrt(CGFloat(countsByColor[color]!) / CGFloat(M_PI))
+            depthsByColor[color] = (-1.0 / 15) * radius + 7.5
         }
     }
 }

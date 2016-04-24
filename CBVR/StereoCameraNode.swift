@@ -20,14 +20,14 @@ class StereoCameraNode: SCNNode {
         
         cameraLeft.camera = SCNCamera()
         cameraLeft.position = SCNVector3(-eyeDistance / 2, 0, 0)
-        cameraLeft.camera?.zNear = 0.00001
-        cameraLeft.camera?.zFar = 10
+        cameraLeft.camera?.zNear = 0.0001
+        cameraLeft.camera?.zFar = 100
         addChildNode(cameraLeft)
         
         cameraRight.camera = SCNCamera()
         cameraRight.position = SCNVector3(eyeDistance / 2, 0, 0)
-        cameraRight.camera?.zNear = 0.00001
-        cameraRight.camera?.zFar = 10
+        cameraRight.camera?.zNear = 0.0001
+        cameraRight.camera?.zFar = 100
         addChildNode(cameraRight)
     }
 

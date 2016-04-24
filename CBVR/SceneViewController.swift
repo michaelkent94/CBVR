@@ -10,16 +10,16 @@ import UIKit
 import QuartzCore
 import SceneKit
 
-class SceneViewController: UIViewController {
+class SceneViewController: UIViewController, VideoViewDelegate {
     
     @IBOutlet weak var leftScnView: SCNView!
     @IBOutlet weak var rightScnView: SCNView!
     
     let cameraOrigin = SCNVector3(0, 0, 0)
-    
     var orientationManager: OrientationManager!
-    
     var cameraNode = StereoCameraNode()
+    
+    var fingerNode: SCNNode!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +70,14 @@ class SceneViewController: UIViewController {
         anim.duration = 4.0
         sphereNode.addAnimation(anim, forKey: "motion")
         
+        let fingerSphere = SCNSphere(radius: 3)
+        let red = SCNMaterial()
+        red.diffuse.contents = UIColor.redColor()
+        fingerSphere.materials = [red]
+        fingerNode = SCNNode(geometry: fingerSphere)
+        fingerNode.hidden = true
+        scene.rootNode.addChildNode(fingerNode)
+        
         // grab the ship and rotate it
         let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
         ship.removeFromParentNode()
@@ -99,7 +107,7 @@ class SceneViewController: UIViewController {
             scene.rootNode.addChildNode(shipCopy)
         }
         
-        
+        (view as! VideoView).delegate = self
     }
     
     func setupLightingWithScene(scene: SCNScene) {
@@ -116,6 +124,24 @@ class SceneViewController: UIViewController {
         ambientLightNode.light!.type = SCNLightTypeAmbient
         ambientLightNode.light!.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
+    }
+    
+    func videoView(videoView: VideoView, didRecognizePoint point: CGPoint?, atDepthInDecimeters depth: CGFloat) {
+        if let point = point {
+            let projected = SCNVector3(point.x, point.y, 1)
+            let unprojected = leftScnView.unprojectPoint(projected)
+            
+            let cameraToPoint = (unprojected - cameraNode.cameraLeft.position).normalized()
+            let position = cameraNode.cameraLeft.position + cameraToPoint * (Float(depth) * 10.0)
+            
+            print("depth = \(depth)")
+            
+            fingerNode.position = position
+            fingerNode.hidden = false
+        } else {
+            fingerNode.hidden = true
+        }
+        
     }
     
     func handleTap(gestureRecognize: UIGestureRecognizer) {
@@ -168,4 +194,23 @@ class SceneViewController: UIViewController {
         // Release any cached data, images, etc that aren't in use.
     }
 
+}
+
+func -(lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: lhs.x - rhs.x, y: lhs.y - rhs.y, z: lhs.z - rhs.z)
+}
+
+func +(lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
+}
+
+func *(lhs: SCNVector3, rhs: Float) -> SCNVector3 {
+    return SCNVector3(x: lhs.x * rhs, y: lhs.y * rhs, z: lhs.z * rhs)
+}
+
+extension SCNVector3 {
+    func normalized() -> SCNVector3 {
+        let norm = sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+        return SCNVector3(x: self.x / norm, y: self.y / norm, z: self.z / norm)
+    }
 }

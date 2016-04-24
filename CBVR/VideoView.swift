@@ -9,14 +9,17 @@
 import AVFoundation
 import UIKit
 
+protocol VideoViewDelegate {
+    func videoView(videoView: VideoView, didRecognizePoint: CGPoint?, atDepthInDecimeters: CGFloat)
+}
+
 class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
     var output: AVCaptureVideoDataOutput!
-    var tracker: Tracker = Tracker(colors: [Color(r: 100, g: 0, b: 0)], threshold: 50)
-    
-    var overlay: OverlayLayer!
+    var tracker: Tracker = Tracker(colors: [Color(r: 200, g: 0, b: 0)], threshold: 100)
+    var delegate: VideoViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,7 +41,6 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     override func didMoveToSuperview() {
-        var previewLayer: AVCaptureVideoPreviewLayer!
         if let captureDevice = captureDevice {
             do {
                 try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
@@ -47,7 +49,7 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
                 captureDevice.unlockForConfiguration()
             } catch { return }
             
-            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+            let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             previewLayer.connection.videoOrientation = .LandscapeRight
             previewLayer.videoGravity = AVLayerVideoGravityResizeAspect
             previewLayer.frame = CGRect(x: 0, y: 0, width: self.frame.size.width / 2, height: self.frame.size.height)
@@ -72,14 +74,6 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
             
             captureSession.startRunning()
         }
-        
-        if previewLayer != nil {
-            overlay = OverlayLayer()
-            overlay.frame = previewLayer.bounds
-            overlay.bounds = previewLayer.bounds
-            previewLayer.addSublayer(overlay)
-            overlay.setNeedsDisplay()
-        }
     }
     
     
@@ -87,20 +81,18 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         let image = imageFromSampleBuffer(sampleBuffer)
         tracker.process(image: image)
         
+        let offset = (self.layer.bounds.size.height - 0.75 * self.layer.bounds.size.width) / 2
+        
         var center = tracker.centersByColor.values.first
         if center != nil {
-            let scale = self.layer.bounds.size.width / CGFloat(CGImageGetWidth(image))
+            let scale = self.layer.bounds.size.width / CGFloat(CGImageGetWidth(image)) / 2
             center!.x *= scale
             center!.y *= scale
+            center!.y = self.layer.bounds.size.height - center!.y
+            center!.y += offset * 2
         }
         
-//        print("<\(bounds.size)>: \(center)")
-        
-        overlay.center = center
-        dispatch_async(dispatch_get_main_queue()) {
-            self.overlay.contents = nil
-            self.overlay.setNeedsDisplay()
-        }
+        delegate?.videoView(self, didRecognizePoint: center, atDepthInDecimeters: tracker.depthsByColor.values.first ?? 0)
     }
     
     
@@ -125,23 +117,5 @@ class VideoView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         
         CVPixelBufferUnlockBaseAddress(buffer, 0) // unlock the buffer
         return image
-    }
-
-//    // Only override drawRect: if you perform custom drawing.
-//    // An empty implementation adversely affects performance during animation.
-//    override func drawRect(rect: CGRect) {
-//        
-//    }
-}
-
-class OverlayLayer: CALayer {
-    var center: CGPoint?
-    
-    override func drawInContext(ctx: CGContext) {
-        guard let center = center else { return }
-        
-        CGContextSetStrokeColorWithColor(ctx, UIColor.whiteColor().CGColor)
-        CGContextSetLineWidth(ctx, 5)
-        CGContextStrokeEllipseInRect(ctx, CGRect(x: center.x - 20, y: center.y - 20, width: 40, height: 40))
     }
 }
