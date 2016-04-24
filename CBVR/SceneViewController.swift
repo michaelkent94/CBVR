@@ -44,12 +44,31 @@ class SceneViewController: UIViewController {
             self.cameraNode.transform = transform
         }
         
-        // Add the sphere finger node
-        let sphere = SCNSphere(radius: 0.25)
-        sphere.firstMaterial?.diffuse.contents = UIColor.redColor()
+        // Set up the SCNViews
+        leftScnView.scene = scene
+        leftScnView.backgroundColor = UIColor.clearColor()
+        leftScnView.pointOfView = cameraNode.cameraLeft
+        leftScnView.showsStatistics = true
+        rightScnView.scene = scene
+        rightScnView.backgroundColor = UIColor.clearColor()
+        rightScnView.pointOfView = cameraNode.cameraRight
+        
+        // Add a sphere, texture it as a meteor, and animate it back and forth
+        let sphere = SCNSphere(radius: 1.0)
+        let mat = SCNMaterial()
+        mat.diffuse.contents = UIImage(named: "art.scnassets/meteor.jpg")
+        mat.normal.contents = UIImage(named: "art.scnassets/meteor-normal.jpg")
+        sphere.materials = [mat]
         let sphereNode = SCNNode(geometry: sphere)
-        sphereNode.position = SCNVector3(x: 0, y: 0, z: 5)
+        sphereNode.position = SCNVector3(x: 0, y: 0, z: -25)
         scene.rootNode.addChildNode(sphereNode)
+        let anim = CABasicAnimation(keyPath: "position.z")
+        anim.byValue = 22.0
+        anim.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        anim.autoreverses = true
+        anim.repeatCount = Float.infinity
+        anim.duration = 4.0
+        sphereNode.addAnimation(anim, forKey: "motion")
         
         // grab the ship and rotate it
         let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
@@ -80,15 +99,7 @@ class SceneViewController: UIViewController {
             scene.rootNode.addChildNode(shipCopy)
         }
         
-        // Set up the SCNViews
-        leftScnView.scene = scene
-        leftScnView.backgroundColor = UIColor.clearColor()
-        leftScnView.pointOfView = cameraNode.cameraLeft
-        leftScnView.showsStatistics = true
         
-        rightScnView.scene = scene
-        rightScnView.backgroundColor = UIColor.clearColor()
-        rightScnView.pointOfView = cameraNode.cameraRight
     }
     
     func setupLightingWithScene(scene: SCNScene) {
